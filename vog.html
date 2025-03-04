@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOG Formulier - Frosty Roleplay</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <section id="vog">
+        <h2>VOG Formulier</h2>
+        <button id="new-vog-btn">Nieuwe VOG Indienen</button>
+        <form id="new-vog-form" style="display:none;">
+            <label for="application-id">Sollicitatie ID:</label>
+            <input type="text" id="application-id" name="application-id" required>
+            <label for="vog-status">VOG Status:</label>
+            <select id="vog-status" name="vog-status">
+                <option value="approved">Goedgekeurd</option>
+                <option value="pending">In afwachting</option>
+                <option value="rejected">Afgekeurd</option>
+            </select>
+            <button type="submit">VOG Status Bijwerken</button>
+        </form>
+    </section>
+
+    <section id="vog-approval" style="display:none;">
+        <h2>VOG Formulier Goedkeuren</h2>
+        <form id="approve-vog-form">
+            <label for="approve-application-id">Sollicitatie ID:</label>
+            <input type="text" id="approve-application-id" name="application-id" required>
+            <label for="approve-status">Status:</label>
+            <select id="approve-status" name="status">
+                <option value="approved">Goedgekeurd</option>
+                <option value="pending">In afwachting</option>
+                <option value="rejected">Afgekeurd</option>
+            </select>
+            <button type="submit">Goedkeuren</button>
+        </form>
+    </section>
+
+    <script src="scripts.js"></script>
+</body>
+
+</html>

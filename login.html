@@ -1,0 +1,85 @@
+<?php 
+require "config.php";
+
+if (isset($_GET['returnpage'])) {
+    $_SESSION['returnpage'] = $_GET['returnpage'];
+    Header("Location: login.php");
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "POST" AND $_POST['form'] == "login") {
+    if (trim($_POST['username']) == NULL || trim($_POST['password']) == NULL) {
+        Header("Location:login.php?error");
+    }
+    
+    $query = $con->query("SELECT id,password,role,name,role,rang,2fa FROM users WHERE username = '".$con->real_escape_string($_POST['username'])."' AND status = 'active'");
+    if ($query->num_rows == 1) {
+        $row = $query->fetch_assoc();
+        if (password_verify($_POST['password'], $row['password'])) {
+            $_SESSION['loggedin'] = true;
+            $_SESSION['username'] = $_POST['username'];
+            $_SESSION['role'] = $row['role'];
+            $_SESSION['name'] = $row['name'];
+            $_SESSION['rang'] = $row['rang'];
+            $_SESSION['id'] = $row['id'];
+            
+            if ($row['2fa'] != NULL) {
+                $_SESSION['2fa'] = $row['2fa'];
+                Header("Location:2fa.php");
+                exit;
+            }
+            
+            // Redirect to index.php after successful login
+            Header("Location:index.php");
+        } else {
+            Header("Location:login.php?error");
+        }
+    } else {
+        Header("Location:login.php?error");
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="img js-fullheight" style="background-image: url('img/bg.png');">
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="login-wrap p-0">
+                        <h3 class="mb-4 text-center">Log in</h3>
+                        <form action="login.php" method="POST" class="signin-form">
+                            <input type="hidden" name="form" value="login">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Gebruikersnaam" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="Wachtwoord" name="password" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control btn btn-primary submit px-3">Inloggen</button>
+                            </div>
+                        </form>
+                        <p class="w-100 text-center">&mdash; Of &mdash;</p>
+                        <div class="social d-flex text-center">
+                            <a href="/404.php" class="btn btn-primary w-100">Solliciteren</a>
+                            <a href="/404.php" class="btn btn-primary w-100">Klachten</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
